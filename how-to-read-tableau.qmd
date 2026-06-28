@@ -1,0 +1,307 @@
+---
+title: "How to read tableaux, a formal system for modal logic with Kripke models"
+format:
+  pdf:
+    theme: default
+    header-includes:
+      - \usepackage{prooftrees}
+      - \usepackage{amsmath}
+      - \usepackage{amssymb}
+      - \usepackage{booktabs}
+      - \usepackage{adjustbox}
+      - \usepackage{tikz}
+      - \usetikzlibrary{arrows.meta, positioning}
+      - \tikzset{world/.style={inner sep=2pt, font=\small}, val/.style={anchor=west, inner sep=0pt, font=\small}}
+      - \def\worldsep{6mm}
+---
+
+Recently I've been thinking a lot about a certain model of a rational agent: a proof-based agent which is triggered to act when it finds certain proofs in Peano arithmetic (PA).
+Back when MIRI had an agent foundations team, they found they could derive what these agents would do using provability logic, a modal logic in which the necessity box $\Box$ represents the provability predicate in PA.
+As a fun example, they ran [a "modal combat" tournament](https://arxiv.org/abs/1401.5577) in which "modal agents", a special case of proof-based agents, faced each other in prisoner's dilemmas.
+Resolving these matches becomes an exercise in modal logic.
+
+I've been trying out these matches on paper, and I like the way I do modal logic better than the way the rest of you do it on LessWrong.
+You all do step-by-step proofs.
+"Natural deduction" I guess, since the formal version is called a "natural deduction system".
+
+I answer modal logic questions using the semantics: Kripke frames, directed graphs of possible worlds.
+[I've tried to convince you](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames) that if you look at the Kripke frames in "modal combat", they make sense and provide insight.
+One possible world looks like the real world, another looks like my simulation of my opponent, and another looks like my simulated opponent simulating me.
+They're like thought bubble worlds.
+
+But the way I come up with these semantic arguments is actually with a formal system: the tableau method, which is a kind of tree-structured formal proof.
+To think through modal combat matchups I was writing out ~~tableaus~~ _tableaux_ on paper.
+Then, I read those as arguments about Kripke frames, and wrote those arguments in English for my post.
+
+In the future I would sometimes like to just post the tableau, so I'm going to try to teach you how to read them.
+I'm not going to teach you how to _write_ them, which I learned from Graham Priest's _Introduction to Non-Classical Logic_.
+But just to read a tableau as an argument that uses the semantics of the logic—maybe we can get that far in a blog post.
+
+## Example 1: propositional logic
+
+### Truth table
+
+If you don't know what I mean by semantics, let's consider an example I hope you're already familiar with: truth tables.
+
+Suppose I want to prove the [disjunctive syllogism](https://en.wikipedia.org/wiki/Disjunctive_syllogism) is valid in propositional logic.
+That's an argument where the premises are $P \lor Q$ and $\lnot P$, and the conclusion is $Q$.
+
+Let's negate the conclusion and do a kind of proof by contradiction.
+With a truth table, we can show that it is impossible to simultaneously satisfy $P \lor Q$, $\lnot P$, and $\lnot Q$:
+
+```{=latex}
+\begin{center}
+\begin{tabular}{cc|ccc}
+\toprule
+$P$ & $Q$ & $P \lor Q$ & $\lnot P$ & $\lnot Q$\\
+\midrule
+T & T & T & F & F \\
+T & F & T & F & T \\
+F & T & T & T & F \\
+F & F & F & T & T \\
+\bottomrule
+\end{tabular}
+\end{center}
+```
+
+No row with all $T$'s for these three statements.
+
+In propositional logic, a _model_ is a row in the truth table.
+By a model, I mean, the kind of thing that a sentence can be true or false of.
+A model, a row in the truth table, is a _valuation_ of all the sentences of propositional logic, constrained by consistency rules ("$P$ and $Q$ have the value True iff $P \land Q$ does " etc.).
+
+We showed there can't be a model satisfying the premises that also satisfies $\lnot Q$, thus proving that the premises entail $Q$.
+This was an appeal to the semantics of propositional logic.
+
+### Tableau
+
+Now, making the same argument with a tableau.
+We begin by listing our premises and our negated conclusion.
+Then, the disjunction $P \lor Q$ splits the tableau into two branches, where we separately consider the $P$ case and the $Q$ case:
+
+```{=latex}
+\begin{center}
+\begin{prooftree}{not line numbering}
+  [P \lor Q
+    [\lnot P
+      [\lnot Q
+        [P, close]
+        [Q, close]
+      ]
+    ]
+  ]
+\end{prooftree}
+\end{center}
+```
+
+We write a $\otimes$ to _close_ a branch once we can find a contradiction anywhere tracing upwards.
+If all the branches close, that means we can't satisfy the sentences we started with.
+
+The relationship between the tableau and the truth table might be more clear if I start the tableau with just the premises of the disjunctive syllogism:
+
+```{=latex}
+\begin{center}
+\begin{prooftree}{not line numbering}
+  [P \lor Q
+    [\lnot P
+      [P, close]
+      [Q]
+    ]
+  ]
+\end{prooftree}
+\end{center}
+```
+
+From the open branch you can read off the model, the third row of the truth table.
+
+By the way, the tableau stops there because there are no more rules to apply.
+We don't have the "lengthening" rules you would have available in a natural deduction system.
+For example, we don't have disjunction introduction (which takes you from $P$ to $P \lor Q$).
+This gives tableaux a pleasing mechanical feel: you just apply whatever rules you can until you run out.
+
+## Example 2: modal logic
+
+Tableaux get more interesting in modal logic, but as before, let's start with the semantics.
+To build a model of a statement of modal logic, we start with a Kripke frame.
+A Kripke frame consists of a set of possible worlds, and a relation on this set, which I'll call the "visibility" relation, following [the Arbital page](https://www.lesswrong.com/w/kripke-model).
+I write this relation as an arrow, which is why I said earlier that a Kripke frame is a directed graph.
+A Kripke model is a Kripke frame, plus, for each possible world, a valuation of all the statements.
+
+In the tableau method for modal logic, we index statements according to what world they're true in.
+A line like $P, N$ means $P$ is true in world $w_N$.
+And a line like $MrN$ means $w_N$ is visible from $w_M$.
+
+As an example where we can see the tableau branch, let's consider the disjunction $\Diamond P \lor \Diamond Q$:
+
+```{=latex}
+\begin{center}
+\begin{prooftree}{not line numbering, for tree={font=\small}}
+  [{\Diamond P \lor \Diamond Q, 0}
+    [{\Diamond P, 0}
+      [{0r1}
+        [{P, 1}]
+      ]
+    ]
+    [{\Diamond Q, 0}
+      [{0r1}
+        [{Q, 1}]
+      ]
+    ]
+  ]
+\end{prooftree}
+\end{center}
+```
+
+Corresponding to the two branches of the tableau, we have two Kripke models:
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (p0) {$w_0$};
+  \node[world] (p1) [below=\worldsep of p0] {$w_1$};
+  \draw[->] (p0) -- (p1);
+  \node[val] at (p1.east) {$\,\Vdash P$};
+\end{tikzpicture}
+\hspace{2em}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (q0) {$w_0$};
+  \node[world] (q1) [below=\worldsep of q0] {$w_1$};
+  \draw[->] (q0) -- (q1);
+  \node[val] at (q1.east) {$\,\Vdash Q$};
+\end{tikzpicture}
+\end{center}
+```
+
+$w_0$ and $w_1$ are possible worlds, an arrow means visibility, and $w_1 \Vdash P$ means $P$ is true in world $w_1$.
+
+As before, I don't want to explain the tableau rules, but I will explain the meaning of $\Diamond$ in Kripke semantics: $\Diamond P$ is true in a world iff $P$ is true in any visible world.
+With that, I hope you can see the relationship between the tableau and the models: $\Diamond P$ requires a visible world where $P$ is true, and $\Diamond Q$ requires a visible world where $Q$ is true.
+
+Some technicalities: since we haven't fully specified the valuations at each world, I guess these are really two classes of Kripke models.
+And if we want to be sure they're distinct from each other, we would need to replace $Q$ with $\lnot P$.
+
+Anyway, I want to show you an example of an actual proof.
+Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion $\Diamond(P \lor Q)$.
+Can you see that this conclusion is true in both of the Kripke models above?
+True in $w_0$, that is.
+
+But to do the proof, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
+The meaning of $\Box$ is that $\Box P$ is true in a world iff $P$ is true in all visible worlds.
+Looking at the Kripke models again, can you see that both of them fail the condition $\lnot (P \lor Q)$ in $w_1$?
+
+The tableau shows that we can't simultaneously satisfy the premise and the negated conclusion at $w_0$:
+
+```{=latex}
+\begin{center}
+\begin{prooftree}{not line numbering, for tree={font=\small, l sep=1.2em, s sep=0.6em}}
+  [{\Diamond P \lor \Diamond Q, 0}
+    [{\lnot\Diamond(P \lor Q), 0}
+      [{\Box\lnot(P \lor Q), 0}
+        [{\Diamond P, 0}
+          [{0r1}
+            [{P, 1}
+              [{\lnot(P \lor Q), 1}
+                [{\lnot P, 1}
+                  [{\lnot Q, 1}, close]
+                ]
+              ]
+            ]
+          ]
+        ]
+        [{\Diamond Q, 0}
+          [{0r1}
+            [{Q, 1}
+              [{\lnot(P \lor Q), 1}
+                [{\lnot P, 1}
+                  [{\lnot Q, 1}, close]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+\end{prooftree}
+\end{center}
+```
+
+It looks big, but it's mostly just the tableau we had before.
+Our negated conclusion adds a bit to each branch: an assertion of $\lnot (P \lor Q)$ in world $w_1$, leading to a contradiction.
+
+## Example 3: a branched Kripke frame
+
+One last thing: I want to make clear to you something that I wish someone had made clear to me.
+Tableaux branch.
+Kripke frames, as directed graphs, can also branch.
+These are totally different.
+
+Our tableau from the previous example branched because we split the proof into cases.
+Semantically, this meant we had two Kripke models, one for each case.
+The Kripke frames themselves were linear, with no branches.
+
+You can get branched Kripke frames.
+For example, instead of considering a disjunction as before, let's consider a conjunction: $\Diamond P \land \Diamond Q$.
+The tableau looks like this:
+
+```{=latex}
+\begin{center}
+\begin{prooftree}{not line numbering, for tree={font=\small}}
+  [{\Diamond P \land \Diamond Q, 0}
+    [{\Diamond P, 0}
+      [{\Diamond Q, 0}
+        [{0r1}
+          [{P, 1}
+            [{0r2}
+              [{Q, 2}]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+\end{prooftree}
+\end{center}
+```
+
+Reading off a Kripke model:
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (w0) {$w_0$};
+  \node[world] (w1) [below left=\worldsep and 4mm of w0] {$w_1$};
+  \node[world] (w2) [below right=\worldsep and 4mm of w0] {$w_2$};
+  \draw[->] (w0) -- (w1);
+  \draw[->] (w0) -- (w2);
+  \node[val] at (w1.east) {$\,\Vdash P$};
+  \node[val] at (w2.east) {$\,\Vdash Q$};
+\end{tikzpicture}
+\end{center}
+```
+
+See?
+The branched Kripke frame was represented in the tableau as the lines $0r1$ and $0r2$.
+Not by a branched tableau.
+
+I thought about following through to a proof as before, but a proof of what?
+We could prove $\Diamond (P \lor Q)$ again, but that's boring, because it only requires one of the conjuncts in the premise.
+We could also prove $\lnot (\Box \lnot P \lor \Box \lnot Q)$, but that's boring because it's too obvious: just exchange $\Box \lnot$ with $\lnot \Diamond$ and use [de Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws).
+Let's just leave it here.
+
+## Where I'm going with this
+
+Sometimes I just want to show you guys a tableau without walking through all the logic.
+
+Really, the reason why I like tableaux is because I can solve cooperation problems by considering three worlds: the real world $w_0$, the world $w_1$ where I simulate you, and the world $w_2$ where this simulation simulates me.
+But if you read my post on that, you know this actually only works with what I called "Payorian cooperation", based on [Payor's lemma](https://www.lesswrong.com/w/payor-s-lemma).
+[Later in the post](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation) I said that to prove the Löbian cooperation used in the modal combat paper, I have to go all the way to $w_4$.
+
+I think it's worth discussing how Löbian cooperation seems weirdly deeply nested from the Kripke frame perspective.
+But the observation that got me started on this whole line of thought was that I actually wrote, on paper, a gigantic tableau to prove Löb's theorem.
+If it weren't for that awful experience, I may never have been interested in Payorian cooperation, which looks more complicated on the surface until the Kripke frame reveals the underlying simplicity of its mechanics.
+
+If you've gotten this far, I think I can just show you the Löb's theorem and Payor's lemma tableaux that got me started with these posts, and actually communicate something to you rather than just give you a giant diagram to scroll past.
+That should be in my next post, so you have that to look forward to.
+
+Oh, and if you want to make your own TeX tableaux, you can see my code at the GitHub repo for this post.
