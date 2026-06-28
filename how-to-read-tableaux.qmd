@@ -304,4 +304,4 @@ If it weren't for that awful experience, I may never have been interested in Pay
 If you've gotten this far, I think I can just show you the Löb's theorem and Payor's lemma tableaux that got me started with these posts, and actually communicate something to you rather than just give you a giant diagram to scroll past.
 That should be in my next post, so you have that to look forward to.
 
-Oh, and if you want to make your own TeX tableaux, you can see my code at the GitHub repo for this post.
+Oh, and if you want to make your own TeX tableaux, you can see my code at [the GitHub repo for this post](https://github.com/transhumanist-atom-understander/how-to-read-tableau).
