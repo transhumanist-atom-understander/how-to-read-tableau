@@ -11,8 +11,10 @@ format:
       - \usepackage{adjustbox}
       - \usepackage{tikz}
       - \usetikzlibrary{arrows.meta, positioning}
-      - \tikzset{world/.style={inner sep=2pt, font=\small}, val/.style={anchor=west, inner sep=0pt, font=\small}}
+      - \tikzset{world/.style={inner sep=2pt, font=\small}, val/.style={anchor=west, inner sep=0pt, font=\small}, valstmts/.style={anchor=north west, inner sep=0pt, font=\small, align=left}}
       - \def\worldsep{6mm}
+      - \def\stmtskip{2pt}
+      - '\newcommand{\stmts}[3]{\node[val] (#1stmt) at (#1.east) {$\,\Vdash #2$};\node[val, anchor=north west, yshift=-\stmtskip] at (#1stmt.south west) {$\,\Vdash #3$};}'
 ---
 
 Recently I've been thinking a lot about a certain model of a rational agent: a proof-based agent which is triggered to act when it finds certain proofs in Peano arithmetic (PA).
@@ -126,10 +128,13 @@ To build a model of a statement of modal logic, we start with a Kripke frame.
 A Kripke frame consists of a set of possible worlds, and a relation on this set, which I'll call the "visibility" relation, following [the Arbital page](https://www.lesswrong.com/w/kripke-model).
 I write this relation as an arrow, which is why I said earlier that a Kripke frame is a directed graph.
 A Kripke model is a Kripke frame, plus, for each possible world, a valuation of all the statements.
+Valuations have new consistency conditions beyond the ones from propositional logic, corresponding to the new model operators, but I'll explain those as they come up.
 
 In the tableau method for modal logic, we index statements according to what world they're true in.
 A line like $P, N$ means $P$ is true in world $w_N$.
 And a line like $MrN$ means $w_N$ is visible from $w_M$.
+
+### Tableau and model
 
 As an example where we can see the tableau branch, let's consider the disjunction $\Diamond P \lor \Diamond Q$:
 
@@ -174,22 +179,95 @@ Corresponding to the two branches of the tableau, we have two Kripke models:
 
 $w_0$ and $w_1$ are possible worlds, an arrow means visibility, and $w_1 \Vdash P$ means $P$ is true in world $w_1$.
 
-As before, I don't want to explain the tableau rules, but I will explain the meaning of $\Diamond$ in Kripke semantics: $\Diamond P$ is true in a world iff $P$ is true in any visible world.
-With that, I hope you can see the relationship between the tableau and the models: $\Diamond P$ requires a visible world where $P$ is true, and $\Diamond Q$ requires a visible world where $Q$ is true.
+Some technicalities: if we want to be sure they're distinct from each other, we would need to replace $Q$ with $\lnot P$.
+And since we haven't fully specified the valuations at each world, I guess these are really two classes of Kripke models.
 
-Some technicalities: since we haven't fully specified the valuations at each world, I guess these are really two classes of Kripke models.
-And if we want to be sure they're distinct from each other, we would need to replace $Q$ with $\lnot P$.
+
+The consistency rules for valuations make some statements implicit.
+$\Diamond P$ is true in a world iff $P$ is true in any visible world.
+So we could also have written:
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (p0) {$w_0$};
+  \node[world] (p1) [below=\worldsep of p0] {$w_1$};
+  \draw[->] (p0) -- (p1);
+  \node[val] at (p0.east) {$\,\Vdash \Diamond P$};
+  \node[val] at (p1.east) {$\,\Vdash P$};
+\end{tikzpicture}
+\hspace{2em}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (q0) {$w_0$};
+  \node[world] (q1) [below=\worldsep of q0] {$w_1$};
+  \draw[->] (q0) -- (q1);
+  \node[val] at (q0.east) {$\,\Vdash \Diamond Q$};
+  \node[val] at (q1.east) {$\,\Vdash Q$};
+\end{tikzpicture}
+\end{center}
+```
+
+In this case, the statements I've added were also in the tableau, so I could have read them off from there.
+What I explicitly annotate on the model as a matter of taste.
+It's like adding columns to a truth table
+
+### Semantic argument
 
 Anyway, I want to show you an example of an actual proof.
 Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion $\Diamond(P \lor Q)$.
-Can you see that this conclusion is true in both of the Kripke models above?
+Can you see that this conclusion is true in both of the Kripke models?
 True in $w_0$, that is.
+One of the consistency conditions we inherited from propositional logic means we can put disjunctions at $w_1$:
 
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (p0) {$w_0$};
+  \node[world] (p1) [below=\worldsep of p0] {$w_1$};
+  \draw[->] (p0) -- (p1);
+  \stmts{p1}{P}{P \lor Q}
+\end{tikzpicture}
+\hspace{2em}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (q0) {$w_0$};
+  \node[world] (q1) [below=\worldsep of q0] {$w_1$};
+  \draw[->] (q0) -- (q1);
+  \stmts{q1}{Q}{P \lor Q}
+\end{tikzpicture}
+\end{center}
+```
+
+This means the destruction is possible at $w_0$:
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (p0) {$w_0$};
+  \node[world] (p1) [below=\worldsep of p0] {$w_1$};
+  \draw[->] (p0) -- (p1);
+  \node[val] at (p0.east) {$\,\Vdash \Diamond(P \lor Q)$};
+  \stmts{p1}{P}{P \lor Q}
+\end{tikzpicture}
+\hspace{2em}
+\begin{tikzpicture}[>={Stealth[round]}]
+  \node[world] (q0) {$w_0$};
+  \node[world] (q1) [below=\worldsep of q0] {$w_1$};
+  \draw[->] (q0) -- (q1);
+  \node[val] at (q0.east) {$\,\Vdash \Diamond(P \lor Q)$};
+  \stmts{q1}{Q}{P \lor Q}
+\end{tikzpicture}
+\end{center}
+```
+
+So that's one way to make the semantic argument.
 But to do a proof by contradiction, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
-The meaning of $\Box$ is that $\Box P$ is true in a world iff $P$ is true in all visible worlds.
-Looking at the Kripke models again, can you see that both of them fail the condition $\lnot (P \lor Q)$ in $w_1$?
+The consistency condition for $\Box$ is that $\Box P$ is true in a world iff $P$ is true in all visible worlds.
+Looking at the Kripke models again, both of them fail the condition $\lnot (P \lor Q)$ in $w_1$, so we can't put $\lnot \Diamond(P \lor Q)$ at $w_0$.
 
-The tableau shows that we can't simultaneously satisfy the premise and the negated conclusion at $w_0$:
+### Tableau proof
+
+With a tableau proof, we can do the semantic proof by contradiction automatically.
+We start with our premise and negated conclusion, and end up closing both branches:
 
 ```{=latex}
 \begin{center}
@@ -284,24 +362,18 @@ See?
 The branched Kripke frame was represented in the tableau as the lines $0r1$ and $0r2$.
 Not by a branched tableau.
 
-I thought about following through to a proof as before, but a proof of what?
-We could prove $\Diamond (P \lor Q)$ again, but that's boring, because it only requires one of the conjuncts in the premise.
-We could also prove $\lnot (\Box \lnot P \lor \Box \lnot Q)$, but that's boring because it's too obvious: just exchange $\Box \lnot$ with $\lnot \Diamond$ and use [de Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws).
-Let's just leave it here.
-
 ## Where I'm going with this
 
-Sometimes I just want to show you guys a tableau without walking through all the logic.
+Sometimes I just want to show you a tableau without walking through all the logic.
 
-Really, the reason why I like tableaux is because I can solve cooperation problems by considering three worlds: the real world $w_0$, the world $w_1$ where I simulate you, and the world $w_2$ where this simulation simulates me.
-But if you read my post on that, you know this actually only works with what I called "Payorian cooperation", based on [Payor's lemma](https://www.lesswrong.com/w/payor-s-lemma).
-[Later in the post](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation) I said that to prove the Löbian cooperation used in the modal combat paper, I have to go all the way to $w_4$.
+In my previous post, after explaining how cooperation in modal combat comes with this nice interpretation of each world in the Kripke frame, [I had to admit it doesn't work out that nicely for the Löbian kind of cooperation from the original paper](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation).
+Reasoning through Löbian cooperation takes you all the way down to world four.
+How did I know this?
+The tedious experience of writing out the tableau by hand.
 
 I think it's worth discussing how Löbian cooperation seems weirdly deeply nested from the Kripke frame perspective.
-But the observation that got me started on this whole line of thought was that I actually wrote, on paper, a gigantic tableau to prove Löb's theorem.
-If it weren't for that awful experience, I may never have been interested in Payorian cooperation, which looks more complicated on the surface until the Kripke frame reveals the underlying simplicity of its mechanics.
-
-If you've gotten this far, I think I can just show you the Löb's theorem and Payor's lemma tableaux that got me started with these posts, and actually communicate something to you rather than just give you a giant diagram to scroll past.
-That should be in my next post, so you have that to look forward to.
+And it would be nice to be able to just show you that tableau, even if just to say "look how big it is".
+If you've made it this far, I think it will mean a little something more to you than just a big messy diagram you have to scroll past to get back to reading the post.
+I'm planning to include it in my next post.
 
 Oh, and if you want to make your own TeX tableaux, you can see my code at [the GitHub repo for this post](https://github.com/transhumanist-atom-understander/how-to-read-tableau).
