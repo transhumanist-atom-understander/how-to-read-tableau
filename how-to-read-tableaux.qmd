@@ -128,7 +128,7 @@ To build a model of a statement of modal logic, we start with a Kripke frame.
 A Kripke frame consists of a set of possible worlds, and a relation on this set, which I'll call the "visibility" relation, following [the Arbital page](https://www.lesswrong.com/w/kripke-model).
 I write this relation as an arrow, which is why I said earlier that a Kripke frame is a directed graph.
 A Kripke model is a Kripke frame, plus, for each possible world, a valuation of all the statements.
-Valuations have new consistency conditions beyond the ones from propositional logic, corresponding to the new model operators, but I'll explain those as they come up.
+Valuations have new consistency conditions beyond the ones from propositional logic, corresponding to the new modal operators, but I'll explain those as they come up.
 
 In the tableau method for modal logic, we index statements according to what world they're true in.
 A line like $P, N$ means $P$ is true in world $w_N$.
@@ -208,8 +208,8 @@ So we could also have written:
 ```
 
 In this case, the statements I've added were also in the tableau, so I could have read them off from there.
-What I explicitly annotate on the model as a matter of taste.
-It's like adding columns to a truth table
+What I explicitly annotate on the model is a matter of taste.
+It's like adding columns to a truth table.
 
 ### Semantic argument
 
@@ -237,7 +237,7 @@ One of the consistency conditions we inherited from propositional logic means we
 \end{center}
 ```
 
-This means the destruction is possible at $w_0$:
+This means the disjunction is possible at $w_0$:
 
 ```{=latex}
 \begin{center}
@@ -261,8 +261,9 @@ This means the destruction is possible at $w_0$:
 
 So that's one way to make the semantic argument.
 But to do a proof by contradiction, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
-The consistency condition for $\Box$ is that $\Box P$ is true in a world iff $P$ is true in all visible worlds.
-Looking at the Kripke models again, both of them fail the condition $\lnot (P \lor Q)$ in $w_1$, so we can't put $\lnot \Diamond(P \lor Q)$ at $w_0$.
+The consistency condition for $\Box$ is that the sentence must be true in all visible worlds.
+So we can't put that at $w_0$, because that would require $\lnot (P \lor Q)$ at $w_1$, contradicting both Kripke models.
+That's our proof of $\Diamond (P \lor Q)$.
 
 ### Tableau proof
 
@@ -367,7 +368,7 @@ Not by a branched tableau.
 Sometimes I just want to show you a tableau without walking through all the logic.
 
 In my previous post, after explaining how cooperation in modal combat comes with this nice interpretation of each world in the Kripke frame, [I had to admit it doesn't work out that nicely for the Löbian kind of cooperation from the original paper](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation).
-Reasoning through Löbian cooperation takes you all the way down to world four.
+Reasoning through Löbian cooperation takes you all the way down to $w_4$.
 How did I know this?
 The tedious experience of writing out the tableau by hand.
 
