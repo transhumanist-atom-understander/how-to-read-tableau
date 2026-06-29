@@ -185,7 +185,7 @@ Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion 
 Can you see that this conclusion is true in both of the Kripke models above?
 True in $w_0$, that is.
 
-But to do the proof, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
+But to do a proof by contradiction, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
 The meaning of $\Box$ is that $\Box P$ is true in a world iff $P$ is true in all visible worlds.
 Looking at the Kripke models again, can you see that both of them fail the condition $\lnot (P \lor Q)$ in $w_1$?
 
