@@ -183,7 +183,7 @@ Some technicalities: if we want to be sure they're distinct from each other, we 
 And since we haven't fully specified the valuations at each world, I guess these are really two classes of Kripke models.
 
 
-The consistency rules for valuations make some statements implicit.
+The consistency rules for valuations make some additional statements implicit.
 $\Diamond P$ is true in a world iff $P$ is true in any visible world.
 So we could also have written:
 
@@ -215,8 +215,8 @@ It's like adding columns to a truth table.
 
 Anyway, I want to show you an example of an actual proof.
 Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion $\Diamond(P \lor Q)$.
-Can you see that this conclusion is true in both of the Kripke models?
-True in $w_0$, that is.
+
+First, let's see that this conclusion is implicitly true at $w_0$ in both of our models.
 One of the consistency conditions we inherited from propositional logic means we can put disjunctions at $w_1$:
 
 ```{=latex}
@@ -237,29 +237,9 @@ One of the consistency conditions we inherited from propositional logic means we
 \end{center}
 ```
 
-This means the disjunction is possible at $w_0$:
+By our consistency condition for $\Diamond$, the disjunction is possible at $w_0$.
+That's one way to make the semantic argument.
 
-```{=latex}
-\begin{center}
-\begin{tikzpicture}[>={Stealth[round]}]
-  \node[world] (p0) {$w_0$};
-  \node[world] (p1) [below=\worldsep of p0] {$w_1$};
-  \draw[->] (p0) -- (p1);
-  \node[val] at (p0.east) {$\,\Vdash \Diamond(P \lor Q)$};
-  \stmts{p1}{P}{P \lor Q}
-\end{tikzpicture}
-\hspace{2em}
-\begin{tikzpicture}[>={Stealth[round]}]
-  \node[world] (q0) {$w_0$};
-  \node[world] (q1) [below=\worldsep of q0] {$w_1$};
-  \draw[->] (q0) -- (q1);
-  \node[val] at (q0.east) {$\,\Vdash \Diamond(P \lor Q)$};
-  \stmts{q1}{Q}{P \lor Q}
-\end{tikzpicture}
-\end{center}
-```
-
-So that's one way to make the semantic argument.
 But to do a proof by contradiction, we're going to negate the conclusion, yielding $\lnot \Diamond(P \lor Q)$, or equivalently, $\Box \lnot (P \lor Q)$.
 The consistency condition for $\Box$ is that the sentence must be true in all visible worlds.
 So we can't put that at $w_0$, because that would require $\lnot (P \lor Q)$ at $w_1$, contradicting both Kripke models.
@@ -367,14 +347,17 @@ Not by a branched tableau.
 
 Sometimes I just want to show you a tableau without walking through all the logic.
 
-In my previous post, after explaining how cooperation in modal combat comes with this nice interpretation of each world in the Kripke frame, [I had to admit it doesn't work out that nicely for the Löbian kind of cooperation from the original paper](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation).
-Reasoning through Löbian cooperation takes you all the way down to $w_4$.
-How did I know this?
-The tedious experience of writing out the tableau by hand.
+In [my previous post on modal combat](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames), after explaining this nice interpretation of each world in the Kripke frame, I had to admit that it doesn't actually work out like that in the original modal combat paper.
+That the paper's FairBot cooperates with itself is a Henkin sentence—that is, a sentence asserting its own provability, [as I explained previously](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#L_bian_FairBot).
+[I mentioned in the post](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation) that I did prove the Henkin sentence, but the proof took me all the way down to $w_4$.
+What I was referring to was this tableau:
 
-I think it's worth discussing how Löbian cooperation seems weirdly deeply nested from the Kripke frame perspective.
-And it would be nice to be able to just show you that tableau, even if just to say "look how big it is".
-If you've made it this far, I think it will mean a little something more to you than just a big messy diagram you have to scroll past to get back to reading the post.
-I'm planning to include it in my next post.
+![](henkin-sentence-tableau.jpg)
+
+Now can you see why [cooperation with Payor's lemma](https://www.lesswrong.com/posts/2WpPRrqrFQa6n2x3W/modal-fixpoint-cooperation-without-loeb-s-theorem) was a revelation to me?
+The Payorian FairBot has a more complicated-looking definition, but Kripke semantics reveal a simple and intuitive underlying mechanism—the opposite of what I found with the original FairBot.
+
+I hope that if you've made it this far I can show you a tableau like that and it means a little something more to you than just a big messy diagram you have to scroll past to get back to reading the post.
+Even if my point is just "look how awful this is".
 
 Oh, and if you want to make your own TeX tableaux, you can see my code at [the GitHub repo for this post](https://github.com/transhumanist-atom-understander/how-to-read-tableau).
