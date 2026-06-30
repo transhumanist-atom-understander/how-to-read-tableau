@@ -29,14 +29,14 @@ You all do step-by-step proofs.
 I answer modal logic questions using the semantics: Kripke frames, directed graphs of possible worlds.
 [I've tried to convince you](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames) that if you look at the Kripke frames in "modal combat", they make sense and provide insight.
 One possible world looks like the real world, another looks like my simulation of my opponent, and another looks like my simulated opponent simulating me.
-They're like thought bubble worlds.
+They're like thought-bubble worlds.
 
 But the way I come up with these semantic arguments is actually with a formal system: the tableau method, which is a kind of tree-structured formal proof.
 To think through modal combat matchups I was writing out ~~tableaus~~ _tableaux_ on paper.
 Then, I read those as arguments about Kripke frames, and wrote those arguments in English for my post.
 
 In the future I would sometimes like to just post the tableau, so I'm going to try to teach you how to read them.
-I'm not going to teach you how to _write_ them, which I learned from Graham Priest's _Introduction to Non-Classical Logic_.
+I'm not going to teach you how to write them, which I learned from Graham Priest's _Introduction to Non-Classical Logic_.
 But just to read a tableau as an argument that uses the semantics of the logic—maybe we can get that far in a blog post.
 
 ## Example 1: propositional logic
@@ -180,8 +180,7 @@ Corresponding to the two branches of the tableau, we have two Kripke models:
 $w_0$ and $w_1$ are possible worlds, an arrow means visibility, and $w_1 \Vdash P$ means $P$ is true in world $w_1$.
 
 Some technicalities: if we want to be sure they're distinct from each other, we would need to replace $Q$ with $\lnot P$.
-And since we haven't fully specified the valuations at each world, I guess these are really two classes of Kripke models.
-
+And since we haven't fully specified the valuations at each world, these are really two classes of Kripke models.
 
 The consistency rules for valuations make some additional statements implicit.
 $\Diamond P$ is true in a world iff $P$ is true in any visible world.
@@ -347,7 +346,7 @@ Not by a branched tableau.
 
 Sometimes I just want to show you a tableau without walking through all the logic.
 
-In [my previous post on modal combat](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames), after explaining this nice interpretation of each world in the Kripke frame, I had to admit that it doesn't actually work out like that in the original modal combat paper.
+In [my previous post on modal combat](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames), after neatly interpreting each world in the Kripke frame, I had to admit that it doesn't actually work out that nicely when you take the Kripke frame perspective on the original modal combat paper.
 That the paper's FairBot cooperates with itself is a Henkin sentence—that is, a sentence asserting its own provability, [as I explained previously](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#L_bian_FairBot).
 [I mentioned in the post](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation) that I did prove the Henkin sentence, but the proof took me all the way down to $w_4$.
 What I was referring to was this tableau:
