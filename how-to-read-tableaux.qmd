@@ -1,20 +1,14 @@
 ---
 title: "How to read tableaux, a formal system for modal logic with Kripke models"
+filters:
+  - tikz
+tikz:
+  svg-command: ["dvisvgm", "-P", "-n", "-o", "{output}", "{input}"]
+  tex-template: tikz-template.tex
+  cache: true
 format:
-  pdf:
-    theme: default
-    header-includes:
-      - \usepackage{prooftrees}
-      - \usepackage{amsmath}
-      - \usepackage{amssymb}
-      - \usepackage{booktabs}
-      - \usepackage{adjustbox}
-      - \usepackage{tikz}
-      - \usetikzlibrary{arrows.meta, positioning}
-      - \tikzset{world/.style={inner sep=2pt, font=\small}, val/.style={anchor=west, inner sep=0pt, font=\small}, valstmts/.style={anchor=north west, inner sep=0pt, font=\small, align=left}}
-      - \def\worldsep{6mm}
-      - \def\stmtskip{2pt}
-      - '\newcommand{\stmts}[3]{\node[val] (#1stmt) at (#1.east) {$\,\Vdash #2$};\node[val, anchor=north west, yshift=-\stmtskip] at (#1stmt.south west) {$\,\Vdash #3$};}'
+  gfm:
+    wrap: none
 ---
 
 Recently I've been thinking a lot about a certain model of a rational agent: a proof-based agent which is triggered to act when it finds certain proofs in Peano arithmetic (PA).
@@ -51,7 +45,8 @@ That's an argument where the premises are $P \lor Q$ and $\lnot P$, and the conc
 Let's negate the conclusion and do a kind of proof by contradiction.
 With a truth table, we can show that it is impossible to simultaneously satisfy $P \lor Q$, $\lnot P$, and $\lnot Q$:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-01
 \begin{center}
 \begin{tabular}{cc|ccc}
 \toprule
@@ -81,7 +76,8 @@ Now, making the same argument with a tableau.
 We begin by listing our premises and our negated conclusion.
 Then, the disjunction $P \lor Q$ splits the tableau into two branches, where we separately consider the $P$ case and the $Q$ case:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-02
 \begin{center}
 \begin{prooftree}{not line numbering}
   [P \lor Q
@@ -101,7 +97,8 @@ If all the branches close, that means we can't satisfy the sentences we started 
 
 The relationship between the tableau and the truth table might be more clear if I start the tableau with just the premises of the disjunctive syllogism:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-03
 \begin{center}
 \begin{prooftree}{not line numbering}
   [P \lor Q
@@ -138,9 +135,10 @@ And a line like $MrN$ means $w_N$ is visible from $w_M$.
 
 As an example where we can see the tableau branch, let's consider the disjunction $\Diamond P \lor \Diamond Q$:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-04
 \begin{center}
-\begin{prooftree}{not line numbering, for tree={font=\small}}
+\begin{prooftree}{not line numbering}
   [{\Diamond P \lor \Diamond Q, 0}
     [{\Diamond P, 0}
       [{0r1}
@@ -159,7 +157,8 @@ As an example where we can see the tableau branch, let's consider the disjunctio
 
 Corresponding to the two branches of the tableau, we have two Kripke models:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-05
 \begin{center}
 \begin{tikzpicture}[>={Stealth[round]}]
   \node[world] (p0) {$w_0$};
@@ -187,7 +186,8 @@ The consistency rules for valuations make some additional statements implicit.
 $\Diamond P$ is true in a world iff $P$ is true in any visible world.
 So we could also have written:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-06
 \begin{center}
 \begin{tikzpicture}[>={Stealth[round]}]
   \node[world] (p0) {$w_0$};
@@ -219,7 +219,8 @@ Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion 
 First, let's see that this conclusion is implicitly true at $w_0$ in both of our models.
 One of the consistency conditions we inherited from propositional logic means we can put disjunctions at $w_1$:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-07
 \begin{center}
 \begin{tikzpicture}[>={Stealth[round]}]
   \node[world] (p0) {$w_0$};
@@ -250,9 +251,10 @@ That's our proof of $\Diamond (P \lor Q)$.
 With a tableau proof, we can do the semantic proof by contradiction automatically.
 We start with our premise and negated conclusion, and end up closing both branches:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-08
 \begin{center}
-\begin{prooftree}{not line numbering, for tree={font=\small, l sep=1.2em, s sep=0.6em}}
+\begin{prooftree}{not line numbering, for tree={l sep=1.2em, s sep=0.6em}}
   [{\Diamond P \lor \Diamond Q, 0}
     [{\lnot\Diamond(P \lor Q), 0}
       [{\Box\lnot(P \lor Q), 0}
@@ -303,9 +305,10 @@ You can get branched Kripke frames.
 For example, instead of considering a disjunction as before, let's consider a conjunction: $\Diamond P \land \Diamond Q$.
 The tableau looks like this:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-09
 \begin{center}
-\begin{prooftree}{not line numbering, for tree={font=\small}}
+\begin{prooftree}{not line numbering}
   [{\Diamond P \land \Diamond Q, 0}
     [{\Diamond P, 0}
       [{\Diamond Q, 0}
@@ -325,7 +328,8 @@ The tableau looks like this:
 
 Reading off a Kripke model:
 
-```{=latex}
+```{.tikz}
+%%| filename: diagram-10
 \begin{center}
 \begin{tikzpicture}[>={Stealth[round]}]
   \node[world] (w0) {$w_0$};

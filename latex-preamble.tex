@@ -1,0 +1,11 @@
+\usepackage{prooftrees}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\tikzset{world/.style={inner sep=2pt}, val/.style={anchor=west, inner sep=0pt}, valstmts/.style={anchor=north west, inner sep=0pt, align=left}}
+\def\worldsep{6mm}
+\def\stmtskip{2pt}
+\newcommand{\stmts}[3]{\node[val] (#1stmt) at (#1.east) {$\,\Vdash #2$};\node[val, anchor=north west, yshift=-\stmtskip] at (#1stmt.south west) {$\,\Vdash #3$};}
