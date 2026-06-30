@@ -363,4 +363,4 @@ The Payorian FairBot has a more complicated-looking definition, but Kripke seman
 I hope that if you've made it this far I can show you a tableau like that and it means a little something more to you than just a big messy diagram you have to scroll past to get back to reading the post.
 Even if my point is just "look how awful this is".
 
-Oh, and if you want to make your own TeX tableaux, you can see my code at [the GitHub repo for this post](https://github.com/transhumanist-atom-understander/how-to-read-tableau).
+Oh, and if you want to make your own tableau diagrams in TeX, you can see my code at [the GitHub repo for this post](https://github.com/transhumanist-atom-understander/how-to-read-tableau).
