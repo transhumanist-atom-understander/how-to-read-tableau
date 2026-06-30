@@ -70,7 +70,7 @@ No row with all $T$'s for these three statements.
 
 In propositional logic, a _model_ is a row in the truth table.
 By a model, I mean, the kind of thing that a sentence can be true or false of.
-A model, a row in the truth table, is a _valuation_ of all the sentences of propositional logic, constrained by consistency rules ("$P$ and $Q$ have the value True iff $P \land Q$ does " etc.).
+A model, a row in the truth table, is a _valuation_ of all the sentences of propositional logic, constrained by consistency rules ("$P$ and $Q$ have the value True iff $P \land Q$ does" etc.).
 
 We showed there can't be a model satisfying the premises that also satisfies $\lnot Q$, thus proving that the premises entail $Q$.
 This was an appeal to the semantics of propositional logic.
