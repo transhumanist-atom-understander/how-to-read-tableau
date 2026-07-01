@@ -182,7 +182,7 @@ Some technicalities: if we want to be sure these two models are distinct from ea
 And since we haven't fully specified the valuations at each world, these are really two classes of Kripke models.
 
 The consistency rules for valuations make some additional sentences implicit.
-$\Diamond P$ is true in a world iff $P$ is true in any visible world.
+$\Diamond P$ is true in a world iff $P$ is true in a visible world.
 So we could also have written:
 
 ```{.tikz}
