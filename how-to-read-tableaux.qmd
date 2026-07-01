@@ -61,7 +61,7 @@ F & F & F & T & T \\
 \end{center}
 ```
 
-No row with all $T$'s for these three statements.
+No row with all $T$'s for these three sentences.
 
 In propositional logic, a _model_ is a row in the truth table.
 By a model, I mean, the kind of thing that a sentence can be true or false of.
@@ -92,7 +92,7 @@ Then, the disjunction $P \lor Q$ splits the tableau into two branches, where we 
 \end{center}
 ```
 
-We write a $\otimes$ to _close_ a branch once we can find a contradiction anywhere tracing upwards.
+We write a $\otimes$ to _close_ a branch once we can find a contradiction by tracing upwards.
 If all the branches close, that means we can't satisfy the sentences we started with.
 
 The relationship between the tableau and the truth table might be more clear if I start the tableau with just the premises of the disjunctive syllogism:
@@ -121,13 +121,13 @@ This gives tableaux a pleasing mechanical feel: you just apply whatever rules yo
 ## Example 2: modal logic
 
 Tableaux get more interesting in modal logic, but as before, let's start with the semantics.
-To build a model of a statement of modal logic, we start with a Kripke frame.
+To build a model of a sentence of modal logic, we start with a Kripke frame.
 A Kripke frame consists of a set of possible worlds, and a relation on this set, which I'll call the "visibility" relation, following [the Arbital page](https://www.lesswrong.com/w/kripke-model).
 I write this relation as an arrow, which is why I said earlier that a Kripke frame is a directed graph.
-A Kripke model is a Kripke frame, plus, for each possible world, a valuation of all the statements.
+A Kripke model is a Kripke frame, plus, for each possible world, a valuation of all the sentences.
 Valuations have new consistency conditions beyond the ones from propositional logic, corresponding to the new modal operators, but I'll explain those as they come up.
 
-In the tableau method for modal logic, we index statements according to what world they're true in.
+In the tableau method for modal logic, we index sentences according to what world they're true in.
 A line like $P, N$ means $P$ is true in world $w_N$.
 And a line like $MrN$ means $w_N$ is visible from $w_M$.
 
@@ -178,10 +178,10 @@ Corresponding to the two branches of the tableau, we have two Kripke models:
 
 $w_0$ and $w_1$ are possible worlds, an arrow means visibility, and $w_1 \Vdash P$ means $P$ is true in world $w_1$.
 
-Some technicalities: if we want to be sure they're distinct from each other, we would need to replace $Q$ with $\lnot P$.
+Some technicalities: if we want to be sure these two models are distinct from each other, we would need to replace $Q$ with $\lnot P$.
 And since we haven't fully specified the valuations at each world, these are really two classes of Kripke models.
 
-The consistency rules for valuations make some additional statements implicit.
+The consistency rules for valuations make some additional sentences implicit.
 $\Diamond P$ is true in a world iff $P$ is true in any visible world.
 So we could also have written:
 
@@ -206,7 +206,7 @@ So we could also have written:
 \end{center}
 ```
 
-In this case, the statements I've added were also in the tableau, so I could have read them off from there.
+In this case, the sentences I've added were also in the tableau, so I could have read them off from there.
 What I explicitly annotate on the model is a matter of taste.
 It's like adding columns to a truth table.
 
@@ -216,7 +216,7 @@ Anyway, I want to show you an example of an actual proof.
 Let's show that our premise $\Diamond P \lor \Diamond Q$ entails the conclusion $\Diamond(P \lor Q)$.
 
 First, let's see that this conclusion is implicitly true at $w_0$ in both of our models.
-One of the consistency conditions we inherited from propositional logic means we can put disjunctions at $w_1$:
+One of the consistency conditions we inherited from propositional logic means we implicitly have disjunctions at $w_1$:
 
 ```{.tikz}
 %%| filename: diagram-07
@@ -350,7 +350,7 @@ Not by a branched tableau.
 
 Sometimes I just want to show you a tableau without walking through all the logic.
 
-In [my previous post on modal combat](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames), after neatly interpreting each world in the Kripke frame, I had to admit that it doesn't actually work out that nicely when you take the Kripke frame perspective on the original modal combat paper.
+In [my previous post on modal combat](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames), after neatly interpreting each world in the Kripke frame, I had to admit that the semantic perspective doesn't actually work out that nicely for the original modal combat paper.
 That the paper's FairBot cooperates with itself is a Henkin sentence—that is, a sentence asserting its own provability, [as I explained previously](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#L_bian_FairBot).
 [I mentioned in the post](https://www.lesswrong.com/posts/LaCP6WyNzX8kiZn3w/payorian-cooperation-is-easy-with-kripke-frames#The_sense_in_which_this_is_simpler_than_L_bian_cooperation) that I did prove the Henkin sentence, but the proof took me all the way down to $w_4$.
 What I was referring to was this tableau:
